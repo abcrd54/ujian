@@ -1,0 +1,302 @@
+Buatkan panduan program untuk sistem ujian sekolah digital.
+
+Tech stack:
+- Frontend: JavaScript framework modern, gunakan Next.js atau React + Vite
+- Backend/API: Next.js API Routes / Express.js
+- Database: Supabase PostgreSQL
+- Auth: Supabase Auth
+- Storage: Supabase Storage
+- UI: Tailwind CSS + shadcn/ui
+- Deployment: Vercel untuk frontend, Supabase untuk database
+
+Konsep aplikasi:
+Sistem ujian sekolah berbasis web/app dengan dashboard admin modern minimalis.
+Dashboard digunakan admin sekolah untuk mengelola guru, siswa, kelas, mapel, ujian, jadwal ujian, tugas pembuatan soal, review soal, hasil ujian, dan integrasi API.
+
+Role user:
+1. Super Admin
+2. Admin Sekolah
+3. Guru
+4. Siswa
+
+Hak akses:
+Super Admin:
+- Kelola data sekolah
+- Monitoring semua sekolah
+- Kelola API key sekolah
+
+Admin Sekolah:
+- Kelola guru
+- Kelola siswa
+- Kelola kelas
+- Kelola mapel
+- Membuat ujian
+- Menugaskan guru membuat soal
+- Review soal
+- Menjadwalkan ujian
+- Melihat hasil ujian
+
+Guru:
+- Melihat tugas membuat soal
+- Membuat soal pilihan ganda dan essay
+- Submit soal ke admin
+- Koreksi jawaban essay
+- Melihat hasil siswa untuk mapelnya
+
+Siswa:
+- Login aplikasi
+- Melihat jadwal ujian
+- Mengerjakan ujian
+- Melihat hasil jika sudah dipublish
+
+Struktur halaman:
+1. Login
+2. Dashboard Admin
+3. Data Sekolah
+4. Data Guru
+5. Data Siswa
+6. Data Kelas
+7. Data Mapel
+8. Data Ujian
+9. Tugas Guru Buat Soal
+10. Review Soal
+11. Jadwal Ujian
+12. Sesi Ujian Siswa
+13. Koreksi Essay
+14. Hasil Ujian
+15. API Integration
+16. Pengaturan
+
+UI/UX Dashboard:
+- Modern minimalis
+- Sidebar kiri
+- Header sticky
+- Card statistik
+- Tabel clean dengan search/filter
+- Form step-by-step
+- Badge status warna
+- Empty state yang jelas
+- Loading skeleton
+- Modal konfirmasi
+- Toast notification
+- Responsive desktop dan tablet
+- Warna utama biru tua, biru terang, putih, abu muda
+- Font clean seperti Inter
+
+Database Supabase:
+Buat schema tabel berikut:
+
+1. schools
+- id uuid primary key
+- name text
+- address text
+- npsn text
+- api_key text
+- status text
+- created_at timestamp
+
+2. profiles
+- id uuid primary key
+- school_id uuid
+- full_name text
+- email text
+- phone text
+- role text
+- status text
+- created_at timestamp
+
+3. teachers
+- id uuid primary key
+- school_id uuid
+- profile_id uuid
+- nip text
+- full_name text
+- email text
+- phone text
+- status text
+
+4. students
+- id uuid primary key
+- school_id uuid
+- class_id uuid
+- nisn text
+- full_name text
+- username text
+- status text
+
+5. classes
+- id uuid primary key
+- school_id uuid
+- name text
+- major text
+- grade text
+
+6. subjects
+- id uuid primary key
+- school_id uuid
+- teacher_id uuid
+- code text
+- name text
+- class_id uuid
+
+7. exams
+- id uuid primary key
+- school_id uuid
+- subject_id uuid
+- class_id uuid
+- teacher_id uuid
+- title text
+- type text
+- duration_minutes int
+- total_pg int
+- total_essay int
+- passing_grade int
+- shuffle_questions boolean
+- shuffle_answers boolean
+- status text
+- question_deadline timestamp
+- created_at timestamp
+
+8. exam_questions
+- id uuid primary key
+- exam_id uuid
+- teacher_id uuid
+- question_type text
+- question_text text
+- image_url text
+- option_a text
+- option_b text
+- option_c text
+- option_d text
+- option_e text
+- correct_answer text
+- rubric_answer text
+- score_weight int
+- explanation text
+- order_number int
+- created_at timestamp
+
+9. exam_schedules
+- id uuid primary key
+- exam_id uuid
+- school_id uuid
+- class_id uuid
+- start_time timestamp
+- end_time timestamp
+- status text
+
+10. exam_sessions
+- id uuid primary key
+- exam_id uuid
+- student_id uuid
+- schedule_id uuid
+- started_at timestamp
+- submitted_at timestamp
+- status text
+- final_score numeric
+
+11. student_answers
+- id uuid primary key
+- session_id uuid
+- question_id uuid
+- student_id uuid
+- answer_text text
+- selected_option text
+- is_correct boolean
+- score numeric
+- graded_by uuid
+- graded_at timestamp
+
+12. api_logs
+- id uuid primary key
+- school_id uuid
+- endpoint text
+- method text
+- status_code int
+- ip_address text
+- created_at timestamp
+
+Flow program:
+1. Super Admin membuat sekolah.
+2. Sistem generate API key untuk sekolah.
+3. Admin sekolah login.
+4. Admin input guru, siswa, kelas, mapel.
+5. Admin membuat ujian.
+6. Admin memilih guru pembuat soal.
+7. Guru login dan melihat tugas ujian.
+8. Guru membuat soal pilihan ganda dan essay.
+9. Guru submit soal ke admin.
+10. Admin review dan approve soal.
+11. Admin membuat jadwal ujian.
+12. Jadwal publish ke aplikasi siswa.
+13. Siswa login dan mengerjakan ujian.
+14. Jawaban pilihan ganda dinilai otomatis.
+15. Jawaban essay dikoreksi guru.
+16. Nilai final muncul di hasil ujian.
+
+API utama:
+POST /api/auth/login
+GET /api/dashboard
+GET /api/teachers
+POST /api/teachers
+GET /api/students
+POST /api/students
+GET /api/classes
+POST /api/classes
+GET /api/subjects
+POST /api/subjects
+GET /api/exams
+POST /api/exams
+GET /api/exams/:id
+POST /api/exams/:id/questions
+POST /api/exams/:id/submit-questions
+POST /api/exams/:id/approve
+POST /api/exam-schedules
+GET /api/student/exams
+POST /api/student/exam-sessions/start
+POST /api/student/answers
+POST /api/student/exam-sessions/submit
+GET /api/results
+POST /api/essay/grade
+
+API key:
+- API key dibuat per sekolah
+- Digunakan untuk integrasi aplikasi mobile/web siswa
+- API key disimpan di tabel schools
+- Request wajib memakai header:
+  Authorization: Bearer {API_KEY}
+  X-School-ID: {SCHOOL_ID}
+
+Keamanan:
+- Gunakan Supabase RLS
+- User hanya bisa akses data berdasarkan school_id
+- Guru hanya bisa akses ujian yang ditugaskan
+- Siswa hanya bisa akses sesi ujian miliknya
+- API key tidak ditampilkan penuh setelah dibuat
+- Gunakan rate limit pada endpoint publik
+- Validasi waktu ujian sebelum siswa bisa mulai
+- Auto submit jika waktu habis
+
+Fitur penting:
+- Import Excel guru dan siswa
+- Generate username siswa
+- Reset password siswa
+- Upload gambar soal
+- Auto save jawaban siswa
+- Timer ujian
+- Acak soal
+- Acak jawaban PG
+- Koreksi essay manual
+- Export nilai PDF/Excel
+- Audit log aktivitas admin/guru
+
+Output yang diinginkan:
+Buatkan dokumentasi program lengkap berisi:
+1. Arsitektur sistem
+2. Struktur folder project
+3. Schema database Supabase
+4. Flow role admin, guru, siswa
+5. API endpoint
+6. Aturan keamanan RLS
+7. Desain UI dashboard modern minimalis
+8. Roadmap development MVP sampai production

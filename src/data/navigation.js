@@ -1,0 +1,16 @@
+export const navItems = [
+  { label: "Beranda", path: "/dashboard", icon: "dashboard", roles: ["owner", "admin", "guru"] },
+  { label: "Data Sekolah", path: "/schools", icon: "apartment", roles: ["owner", "admin"] },
+  { label: "Admin Sekolah", path: "/school-admins", icon: "shield_person", roles: ["owner"] },
+  { label: "Role & Akun", path: "/accounts", icon: "manage_accounts", roles: ["owner"] },
+  { label: "Data Guru", path: "/teachers", icon: "school", roles: ["admin"] },
+  { label: "Data Siswa", path: "/students", icon: "group", roles: ["admin"] },
+  { label: "Data Kelas", path: "/classes", icon: "door_front", roles: ["admin"] },
+  { label: "Data Mata Pelajaran", path: "/subjects", icon: "book", roles: ["admin"] },
+  { label: "Data Ujian", path: "/exams", icon: "quiz", roles: ["admin", "guru"] },
+  { label: "Penyusunan Soal", path: "/question-authoring", icon: "post_add", roles: ["guru"] },
+  { label: "Peninjauan Soal", path: "/review-questions", icon: "fact_check", roles: ["admin"] },
+  { label: "Koreksi Esai", path: "/essay-grading", icon: "grading", roles: ["guru"] },
+  { label: "Jadwal Ujian", path: "/schedules", icon: "calendar_month", roles: ["admin"] },
+  { label: "Hasil Ujian", path: "/results", icon: "analytics", roles: ["admin", "guru"] },
+];

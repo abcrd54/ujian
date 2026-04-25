@@ -1,0 +1,8 @@
+node_modules/
+dist/
+tmp/
+.env
+.vercel/
+*.log
+tmp-downloaded-template.xlsx
+tmp-test-import-soal.xlsx
