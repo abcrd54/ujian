@@ -595,7 +595,7 @@ app.get("/api/health", (_req, res) => {
   res.json({ ok: true, server_time: nowIso() });
 });
 
-app.get("/api/public/schools", async (_req, res, next) => {
+async function handlePublicSchools(_req, res, next) {
   try {
     const { data, error } = await supabaseAdmin
       .from("schools")
@@ -607,7 +607,10 @@ app.get("/api/public/schools", async (_req, res, next) => {
   } catch (error) {
     next(error);
   }
-});
+}
+
+app.get("/api/public/schools", handlePublicSchools);
+app.get("/api/public-schools", handlePublicSchools);
 
 app.post("/api/auth/login", loginLimiter, async (req, res, next) => {
   try {
