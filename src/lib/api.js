@@ -1,6 +1,6 @@
 import { supabase } from "./supabase";
 
-const apiBaseUrl = import.meta.env.VITE_API_BASE_URL || "http://localhost:8787";
+const apiBaseUrl = import.meta.env.VITE_API_BASE_URL || "";
 
 async function getAccessToken() {
   const { data, error } = await supabase.auth.getSession();

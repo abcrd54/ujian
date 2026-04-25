@@ -1,5 +1,6 @@
 const crypto = require("crypto");
 const fs = require("fs");
+const os = require("os");
 const path = require("path");
 const express = require("express");
 const cors = require("cors");
@@ -22,7 +23,7 @@ const { supabaseAdmin, supabaseAnon } = require("./supabaseAdmin");
 
 const app = express();
 const port = Number(process.env.PORT || 8787);
-const upload = multer({ dest: path.join(__dirname, "../tmp") });
+const upload = multer({ dest: path.join(os.tmpdir(), "edu-exam-uploads") });
 
 app.use(helmet());
 app.use(cors({ origin: true, credentials: true }));
@@ -2628,15 +2629,20 @@ app.use((error, _req, res, _next) => {
   });
 });
 
-app.listen(port, () => {
-  // eslint-disable-next-line no-console
-  console.log(`API server running on http://localhost:${port}`);
-});
-
 const autoSubmitEnabled = String(process.env.AUTO_SUBMIT_ENABLED || "true").toLowerCase() !== "false";
 const autoSubmitMs = Math.max(5000, Number(process.env.AUTO_SUBMIT_SWEEP_MS || 30000));
-if (autoSubmitEnabled) {
+const isDirectRun = require.main === module;
+if (isDirectRun) {
+  app.listen(port, () => {
+    // eslint-disable-next-line no-console
+    console.log(`API server running on http://localhost:${port}`);
+  });
+}
+
+if (isDirectRun && autoSubmitEnabled) {
   setInterval(() => {
     runAutoSubmitSweep();
   }, autoSubmitMs);
 }
+
+module.exports = app;
